@@ -1,18 +1,93 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Age Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+        input[type="date"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+        }
+        #age, #next-birthday {
+            margin: 10px 0;
+            color: #333;
+        }
+        #next-birthday {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Company Logo and Name -->
+        <!-- Company Name and Logo -->
         <header>
-            <img src="c:\Users\LENOVO\Pictures\AJLOGO.jpg" alt="Company Logo" class="logo">
-            <h1 class="company name">AJ COMPANY</h1>
-            <p class="tagline">THIS IS FOR PUBLIC SERVICES</p>
+            <h1 class="company-name">AJ COMPANY</h1>
+            <p class="tagline">THE BEST</p>
         </header>
 
         <!-- Age Calculator Section -->
@@ -25,14 +100,63 @@
             <p id="next-birthday"></p>
         </div>
 
-        <!-- Footer with Company Details -->
-        <footer>
-            <p>&copy; 2025 AJ COMPANY PVT LTD. All rights reserved.</p>
-            <p>Contact :  AJ KAMESH </p>  SJ KANISH <a href="mailto:info@yourcompany> kamesh6592@gmail.com </a></p>
-        
+        <!-- Footer with Contact Details -->
+        <footer class="footer">
+            <p>&copy; 2025 AJ-COMPANY. All rights reserved.</p>
+            <p>Contact: <a href="mailto:info@yourcompany.com">kamesh6592@gmail.com</a></p>
+            <p>contact:AJ KAMESH </p> SJ KANISH</p>
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function calculateAge() {
+            const birthdate = document.getElementById('birthdate').value;
+            const ageElement = document.getElementById('age');
+            const nextBirthdayElement = document.getElementById('next-birthday');
+
+            if (!birthdate) {
+                ageElement.textContent = 'Please enter your birthdate.';
+                nextBirthdayElement.textContent = '';
+                return;
+            }
+
+            const today = new Date();
+            const birthDate = new Date(birthdate);
+
+            // Check if the birthdate is in the future
+            if (birthDate > today) {
+                ageElement.textContent = 'Invalid date! Birthdate cannot be in the future.';
+                nextBirthdayElement.textContent = '';
+                return;
+            }
+
+            // Calculate age in years, months, and days
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let monthDifference = today.getMonth() - birthDate.getMonth();
+            let dayDifference = today.getDate() - birthDate.getDate();
+
+            if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+                age--;
+                monthDifference += 12;
+            }
+
+            if (dayDifference < 0) {
+                const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, birthDate.getDate());
+                dayDifference = Math.floor((today - lastMonth) / (1000 * 60 * 60 * 24));
+                monthDifference--;
+            }
+
+            ageElement.textContent = `Your age is ${age} years, ${monthDifference} months, and ${dayDifference} days.`;
+
+            // Calculate next birthday
+            const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBirthday < today) {
+                nextBirthday.setFullYear(today.getFullYear() + 1);
+            }
+
+            const daysUntilNextBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+            nextBirthdayElement.textContent = `Your next birthday is in ${daysUntilNextBirthday} days.`;
+        }
+    </script>
 </body>
 </html>
